@@ -11,6 +11,7 @@
 #include <sys/sysinfo.h>
 
 #include "bench.h"
+#include "qsim_magic.h"
 
 #include "../counter.h"
 #include "../scopedperf.hh"
@@ -232,6 +233,7 @@ bench_runner::run()
        it != workers.end(); ++it)
     (*it)->start();
 
+  qsim_magic_enable();
   barrier_a.wait_for(); // wait for all threads to start up
   timer t, t_nosync;
   barrier_b.count_down(); // bombs away!
@@ -242,6 +244,8 @@ bench_runner::run()
   __sync_synchronize();
   for (size_t i = 0; i < nthreads; i++)
     workers[i]->join();
+  
+  qsim_magic_disable();
   const unsigned long elapsed_nosync = t_nosync.lap();
   db->do_txn_finish(); // waits for all worker txns to persist
   size_t n_commits = 0;

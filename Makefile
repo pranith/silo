@@ -148,7 +148,7 @@ OBJFILES := $(patsubst %.cc, $(O)/%.o, $(SRCFILES))
 
 MASSTREE_OBJFILES := $(patsubst masstree/%.cc, $(O)/%.o, $(MASSTREE_SRCFILES))
 
-BENCH_CXXFLAGS := $(CXXFLAGS)
+BENCH_CXXFLAGS := $(CXXFLAGS) -I$(QSIM_PREFIX)/include
 BENCH_LDFLAGS := $(LDFLAGS) -ldb_cxx -lz -lrt -lcrypt -laio -ldl -lssl -lcrypto
 
 BENCH_SRCFILES = benchmarks/bdb_wrapper.cc \
